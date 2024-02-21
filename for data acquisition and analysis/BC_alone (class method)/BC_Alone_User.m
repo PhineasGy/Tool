@@ -31,6 +31,9 @@ is_checking_critical = 0;
     critical_BC_fail = 1000;                                % ÀË¬d B + C ªº fail number
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% setpath (temporary)
+addpath(fullfile(cd,"class"));
+
 %% Object Build
 CRITICAL = Critical(critical_C_fail=critical_C_fail,critical_B_black=critical_B_black,critical_BC_fail=critical_BC_fail);
 MASK = Mask(panel_pixel_number_hor=panel_pixel_number_hor,panel_pixel_number_ver=panel_pixel_number_ver);
