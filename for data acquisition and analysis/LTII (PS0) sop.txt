@@ -1,0 +1,34 @@
+
+------
+LTII SOP: (update: 20221108)
+
+	1. LT 檔: 
+		1. 原圖 Mask (cube) 放至 指定 RDP, 打開光線追跡
+		2. 把 G 光源關閉停用 MiddlePupilEdge 光源關閉停用
+		
+	(Note: G光源 - For LT還原)
+	(Note: MiddlePupilEdge 光源(矩形光源) - For LTII (PS 0.1 x 0.1) (定位範圍大小位置請自行設定好)
+	
+	2. RPBackTracing 巨集:
+		1. buildLightSource = 1 (建立光源 圓形)
+		2. 設定 光源 觀賞位置 (調整 VD VVA HVA 即可)
+		3. Run. 看到 光源 建立完畢之後 按結束 (ctrl+c)
+		4. buildLightSource = 0 (不建立光源)
+	
+	3. LT 檔:
+		1. 打開 新的 E 光源, 將其 座標 複製貼上到 MiddlePupilEdge 光源
+		2. 重新調整正確 MiddlePupilEdge 定位範圍 (!)
+		3. E 光源刪除 MiddlePupilEdge 全部開啟啟用
+		
+	4. RPBackTracing 巨集:
+		1. 設定接收面位置大小,分片數,解析度等
+		2. Run 等待模擬完成
+		
+	5. output 資料夾:
+		1. 會有 各片Raw 和 結合Raw 和 結合二值 
+
+	6. (LT還原) 相同 LT檔:
+		1. 原圖 Mask (cube) 關閉光線追跡
+		2. 打開 G 光源啟用 並設定正確 (大小位置等)
+		3. 關閉 MiddlePupilEdge 光源停用
+		4. Macro_SLMGenearl
