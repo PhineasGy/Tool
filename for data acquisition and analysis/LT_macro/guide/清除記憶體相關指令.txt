@@ -1,0 +1,11 @@
+
+FlushAllMemory
+FlushUndoMemory
+FlushSavedRayDataMemory
+FlushDeletedEntityMemory
+
+lt.Cmd("FlushUndoMemory");
+lt.Cmd("FlushDeletedEntityMemory");
+lt.Cmd("FlushSavedRayDataMemory");
+lt.Cmd("FlushAllMemory");
+
