@@ -5,7 +5,9 @@ Author: Guan Yu Chen (PhineasGy)
 
 Description: 已有影像的情況下，進行 B+C 的裕度分析
 
-Version: V1.2
+Version: V1.3
+
+update: fail_list --> string type 
 
 ------
 
