@@ -184,7 +184,7 @@ classdef BCAlone < handle
                         if obj.OPTION.is_checking_critical == 1
                             if obj.CRITICAL.critical_B_black < B_black_count
                                 cprintf('key',"[result]: B Fail (黑過多) (continue to next) [B+C 記為 F2]\n")
-                                result_cell{which_WD,which_VA_Term}.C_fail_list(VA_count) = C_fail_count;
+                                result_cell{which_WD,which_VA_Term}.C_fail_list(VA_count) = string(C_fail_count);
                                 result_cell{which_WD,which_VA_Term}.BandC_fail_list(VA_count) = "F2";
                                 continue
                             end
@@ -198,7 +198,7 @@ classdef BCAlone < handle
                         if obj.OPTION.is_checking_critical == 1
                             if obj.CRITICAL.critical_BC_fail < B_and_C_fail_count
                                 cprintf('key',"[result]: B + C Fail (黃過多) (continue to next) [B+C 記為 F3]\n")
-                                result_cell{which_WD,which_VA_Term}.C_fail_list(VA_count) = C_fail_count;
+                                result_cell{which_WD,which_VA_Term}.C_fail_list(VA_count) = string(C_fail_count);
                                 result_cell{which_WD,which_VA_Term}.BandC_fail_list(VA_count) = "F3";
                                 continue
                             end
@@ -208,8 +208,8 @@ classdef BCAlone < handle
                         if obj.OPTION.is_checking_critical == 1
                             cprintf('key',"[result]: Pass\n")
                         end
-                        result_cell{which_WD,which_VA_Term}.C_fail_list(VA_count) = C_fail_count;
-                        result_cell{which_WD,which_VA_Term}.BandC_fail_list(VA_count) = B_and_C_fail_count;
+                        result_cell{which_WD,which_VA_Term}.C_fail_list(VA_count) = string(C_fail_count);
+                        result_cell{which_WD,which_VA_Term}.BandC_fail_list(VA_count) = string(B_and_C_fail_count);
                     end % VA Loop
                 end
             end
