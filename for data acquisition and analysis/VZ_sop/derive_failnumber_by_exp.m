@@ -1,18 +1,25 @@
+clear
+clc
+
 %% 使用者輸入
 VVA_center = 30;
 HVA_center = 0;
 
 %% 工作表名稱
 % 可自行修改，確保 Excel 工作表名稱有符合
-excel_name = "0221 [User] 裕度模板.xlsx";
+excel_name = "0206 [Gy] 裕度 (L21A1-6).xlsx";
 sheet_name_sort = "分析裕度整理";
-sheet_name_VD = ["分析裕度 (VD400)","分析裕度 (VD500)","分析裕度 (VD600)","分析裕度 (VD700)"];
+sheet_name_VD = ["分析裕度 (VD400) (13)","分析裕度 (VD500) (13)","分析裕度 (VD600) (13)","分析裕度 (VD700) (13)"];
 
 %% 裕度邊界, FailNumber 位置
 % 可自行修改
 % EX: D18 to G21 (4x4)
 border_ind = ["D18","G21"];
+% border_ind = ["L18","O21"];
+% border_ind = ["T18","W21"];
+% border_ind = ["AB18","AE21"];
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% fail numbaer table, VZA(critical median) table
 failNumber_table = -1 * ones(4,4);
 failNumber_table = num2cell(failNumber_table);
@@ -26,6 +33,7 @@ VDCount = 0;
 for whichVD = [400,500,600,700]
     VDCount = VDCount + 1;
     sheet_VD_list{VDCount} = readcell(excel_name,'Sheet',sheet_name_VD(VDCount));
+    sheet_VD = sheet_VD_list{VDCount};
     % find center position (B+C)
     center_row = find(cellfun(@(x) isequal(x,VVA_center),sheet_VD(:,1)));
     center_row_list(VDCount) = center_row(2);
