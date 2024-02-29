@@ -6,6 +6,7 @@ classdef Input
         WD_list
         VVA_list
         HVA_list
+        PS_list
         OPTION
     end
     
@@ -18,6 +19,7 @@ classdef Input
              namedArgs.WD_list
              namedArgs.VVA_list
              namedArgs.HVA_list
+             namedArgs.PS_list
              namedArgs.OPTION
             end
 
@@ -26,14 +28,8 @@ classdef Input
             obj.WD_list = namedArgs.WD_list;
             obj.VVA_list = namedArgs.VVA_list;
             obj.HVA_list = namedArgs.HVA_list;
+            obj.PS_list = namedArgs.PS_list;
             obj.OPTION = namedArgs.OPTION;
-        end
-
-        
-        function outputArg = method1(obj,inputArg)
-            %METHOD1 Summary of this method goes here
-            %   Detailed explanation goes here
-            outputArg = obj.Property1 + inputArg;
         end
     end
 end

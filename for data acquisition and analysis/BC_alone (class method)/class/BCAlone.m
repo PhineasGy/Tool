@@ -46,6 +46,7 @@ classdef BCAlone < handle
             HVA_center = obj.INPUT.HVA_center;
             VVA_list = obj.INPUT.VVA_list;
             HVA_list = obj.INPUT.HVA_list;
+            PS_list = obj.INPUT.PS_list;
             VA_mode = obj.OPTION.VA_mode;
             panel_pixel_number_ver = obj.MASK.panel_pixel_number_ver;
             panel_pixel_number_hor = obj.MASK.panel_pixel_number_hor;
@@ -60,6 +61,7 @@ classdef BCAlone < handle
             %% step2: VA loop
             for which_WD = 1:WD_num     % WD loop
                 WD_now = WD_list(which_WD);
+                PS_now = PS_list(which_WD);
                 for which_VA_Term = VA_mode  % VA term loop
                     switch which_VA_Term
                         case 1      % HVA
@@ -86,20 +88,36 @@ classdef BCAlone < handle
                                 VA_pattern = strcat("_VD=",num2str(WD_now,"%07.2f"),...
                                                     "_VVA=",num2str(VVA_now,"%05.2f"),...
                                                     "_HVA=",num2str(HVA_now,"%+06.2f"));
+                                % update: check PS for C
+                                PR_pattern = strcat("_PR=",num2str(PS_now,"%05.2f"),"_");
                             case "hard"
                                 % ignore
                         end
                         cprintf([1,0.5,0],strcat("[info]: 目標影像 ",VA_pattern,"\n"))
                         
                         % get target png/folder
-                        for which_image = 1:num
+                        for which_image = 1:num % order: B --> C --> Mask
                             all_png_name = string({obj.all_png{which_image}.name});
                             all_png_folder = string({obj.all_png{which_image}.folder});
-                            ind_temp1 = contains(all_png_name,VA_pattern);
+                            switch which_image
+                                case 1
+                                    ind_temp1 = contains(all_png_name,VA_pattern);
+                                otherwise   % C 和 Mask 均檢查 PS
+                                    ind_temp1 = contains(all_png_name,VA_pattern) &...
+                                        contains(all_png_name,PR_pattern);
+                            end
                             target_png_name = all_png_name(ind_temp1);
                             target_png_folder = all_png_folder(ind_temp1);
                             if isempty(target_png_name)
-                                error("cannot find file with pattern:" + VA_pattern)
+                                switch which_image
+                                    case 1
+                                        errstr = "<BLP>" + VA_pattern;
+                                    case 2
+                                        errstr = "<C>" + VA_pattern + " " + PR_pattern;
+                                    case 3
+                                        errstr = "<Mask>" + VA_pattern + " " + PR_pattern;
+                                end
+                                error("[error] cannot find file with following pattern: " + errstr + "(系統停止)")
                             end
                             if length(target_png_name) ~= 1
                                 target_png_name = target_png_name(1);  % 遇到兩個以上符合的檔名: 取第一個
