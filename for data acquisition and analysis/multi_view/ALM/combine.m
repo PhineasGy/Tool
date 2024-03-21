@@ -9,7 +9,7 @@ for ii = 1:4
     alm.add(data)
 end
 
-%% plot
+%% plot (normalize, degree)
 figure;
 for dd = 1:4
     L_270 = alm.find(dd,col=269.5);
@@ -17,10 +17,24 @@ for dd = 1:4
     x_range = [-89.5:-0.5,0.5:89.5];
     xlabel("horizontal angle (degree)")
     y_range = [L_270',L_90']; y_range = y_range / max(y_range);
-    ylabel("luminance (nit)")
+    ylabel("luminance (normalized)")
     plot(x_range,y_range);
     hold on 
 end
 legend(["V1","V2","V3","V4"])
 
-
+%% plot (normalize, length)
+VDZ = 500;
+figure;
+for dd = 1:4
+    L_270 = alm.find(dd,col=269.5);
+    L_90 = flipud(alm.find(dd,col=89.5));
+    x_range = [-89.5:-0.5,0.5:89.5]; x_range = VDZ * tand(x_range); % 轉換成長度單位
+    xlabel("horizontal movement (mm)")
+    y_range = [L_270',L_90']; y_range = y_range / max(y_range);
+    ylabel("luminance (normalized)")
+    plot(x_range,y_range);
+    xlim([-240, 240])
+    hold on 
+end
+legend(["V1","V2","V3","V4"])
