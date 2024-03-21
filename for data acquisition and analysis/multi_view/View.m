@@ -96,39 +96,22 @@ classdef View < handle & matlab.mixin.Heterogeneous
             end
         end
         function method_subpixel(obj,only)
-            
-            %% get index array
-            array = nan(obj.number,3); % ex: V1 to V4, rgb
-            % 起始位置: V4-R
-            % 排列: RGB...
-            ind = [obj.number,1];    % 不斷往右往上
-            for ii = 1:obj.number*3
-                array(ind(1),ind(2)) = ii;
-                % 移動
-                ind(1) = mod(ind(1) - 1,obj.number); if ind(1) == 0; ind(1) = obj.number;end
-                ind(2) = mod(ind(2) + 1,3); if ind(2) == 0; ind(2) = 3;end
-            end
 
-            %% assignment
-            % arrange image = (V) x (H) x 3 (V,H: 原圖解析度)
-            reverse = obj.number:-1:1;  % 第一個位置放最後一個 View，依此類推
-            rgb = 1:3;
             obj.arr_image = uint8(zeros([obj.resolution(1) obj.resolution(2) 3]));
-            for ii = 1:obj.resolution(2)/(obj.number)           % view image size
-                for vv = only                                   % (default) 1 : view number
-                    interest_ind = array(vv,:);
-                    for rgb = 1:3
-                        try
-                            if interest_ind(rgb) > obj.resolution(2); continue;end
-                            obj.arr_image(:,interest_ind(rgb),rgb) = obj.image{vv}(:,ii,rgb);
-                        catch
-                            disp(":")
-                        end
+            array = obj.number:-1:1;
+            for ii = 1:obj.resolution(2)
+                interest_view = array(1:3); % 對應 RGB 要塞的 view
+                ind_view = floor((ii-1)/obj.number) + 1;
+                ind_arr = ii;
+                for rgb = 1:3
+                    current_view = interest_view(rgb);
+                    if any(current_view==only)
+                        obj.arr_image(:,ind_arr,rgb) = obj.image{current_view}(:,ind_view,rgb);
                     end
                 end
-                array = array + (obj.number);
+                array = circshift(array,1);
             end
+
         end
     end
 end
-
