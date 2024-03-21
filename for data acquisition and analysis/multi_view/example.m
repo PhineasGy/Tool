@@ -8,22 +8,30 @@ close all
 % 3. current version: LRA0
 
 %% image
-image_mode = 1;
+image_mode = 0;
     RDP = 40;
 
 VD = 500;   % VD = VDZ if direct viewing --> for view center Z (mm)
 IPD = 60;   % for view size (mm)
-p = 1;      % lens pitch (mm)
+p = 0.1;      % lens pitch (mm)
 views = 4;  % total view number
 n = 1.5;    % lens_n
 panelPixelNumberVer = 1080; % pixel number (ver)
 panelPixelNumberHor = 1920; % pixel number (hor)
+method = "subpixel";
 
 %% pre-processing
 view_total_size = IPD * views;
 view_each_size = IPD;
 view_pitch = view_each_size;
-pixel_size = p / views;
+switch method
+    case "pixel"
+        pixel_size = p / views;
+    case "subpixel" % p / views = subpixel size
+        pixel_size = 3 * (p / views);
+    otherwise
+        error("[error] method must be either pixel or subpixel")
+end
 G = p * VD / (view_total_size);
 % effective lens (f=G)
 R = (n-1)*G;
@@ -87,10 +95,4 @@ elseif image_mode == 0
 end
 
 %% Arrange II
-V.createII
-
-%%
-% for ii = 1:4
-%     V.createII(only=ii)
-%     V.write("arr","V"+ii+"_only")
-% end
+V.createII(method=method,only=3)
