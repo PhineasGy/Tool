@@ -70,19 +70,24 @@ classdef View < handle & matlab.mixin.Heterogeneous
             arguments
                 obj
                 options.method
-                options.only   % array. ex: [1,3]
+                options.only            % array. ex: [1,3]
+                options.LT logical      % 是否轉為 LT 格式
             end
             only = 1:obj.number;
             if isfield(options,"only");only = options.only;end
+            if ~isfield(options,"LT");options.LT = true;end
 
             % current method: for LRA0
             switch options.method
                 case "pixel"
                     obj.method_pixel(only);
                 case "subpixel"
-                    obj.method_subpixel(only);
+                    if isequal(options.LT,true) 
+                        obj.method_subpixel_LT(only);
+                    elseif isequal(options.LT,false)
+                        obj.method_subpixel(only);
+                    end
             end
-
         end
         function method_pixel(obj,only)
             reverse = obj.number:-1:1;  % 第一個位置放最後一個 View，依此類推
@@ -111,7 +116,39 @@ classdef View < handle & matlab.mixin.Heterogeneous
                 end
                 array = circshift(array,1);
             end
+        end
+        function method_subpixel_LT(obj,only)
+            %% get index array
+            array = nan(obj.number,3); % ex: V1 to V4, rgb
+            % 起始位置: V4-R
+            % 排列: RGB...
+            ind = [obj.number,1];    % 不斷往右往上
+            for ii = 1:obj.number*3
+                array(ind(1),ind(2)) = ii;
+                % 移動
+                ind(1) = mod(ind(1) - 1,obj.number); if ind(1) == 0; ind(1) = obj.number;end
+                ind(2) = mod(ind(2) + 1,3); if ind(2) == 0; ind(2) = 3;end
+            end
 
+            %% assignment
+            % arrange image = (V) x (H) x 3 (V,H: 原圖解析度)
+            reverse = obj.number:-1:1;  % 第一個位置放最後一個 View，依此類推
+            rgb = 1:3;
+            obj.arr_image = uint8(zeros([obj.resolution(1) obj.resolution(2)*3]));
+            for ii = 1:obj.resolution(2)/(obj.number)           % view image size
+                for vv = only                                   % (default) 1 : view number
+                    interest_ind = array(vv,:);
+                    for rgb = 1:3
+                        try
+                            if interest_ind(rgb) > obj.resolution(2)*3; continue;end
+                            obj.arr_image(:,interest_ind(rgb)) = obj.image{vv}(:,ii,rgb);
+                        catch
+                            disp(":")
+                        end
+                    end
+                end
+                array = array + (obj.number)*3;
+            end
         end
     end
 end

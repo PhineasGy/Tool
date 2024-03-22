@@ -13,7 +13,7 @@ image_mode = 0;
 
 VD = 500;   % VD = VDZ if direct viewing --> for view center Z (mm)
 IPD = 60;   % for view size (mm)
-p = 0.1;      % lens pitch (mm)
+p = 0.1/3;      % lens pitch (mm)
 views = 4;  % total view number
 n = 1.5;    % lens_n
 panelPixelNumberVer = 1080; % pixel number (ver)
@@ -95,4 +95,8 @@ elseif image_mode == 0
 end
 
 %% Arrange Step
-V.createII(method=method,only=3)
+V.createII(method=method,only=4,LT=true)
+% V.createII(method=method,only=3,LT=false)
+% V.createII(method=method,LT=true)
+% V.createII(method=method,LT=false)
+%%
