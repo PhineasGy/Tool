@@ -39,7 +39,7 @@ H = R - sqrt(R^2-(0.5*p)^2);
 panelLengthVer = pixel_size * panelPixelNumberVer;
 panelLengthHor = pixel_size * panelPixelNumberHor;
 
-%% derive View
+%% Camera Stage
 % view center and lens very edge
 % lens z = 0
 view_array = linspace(-(views-1),views-1,views);
@@ -66,7 +66,7 @@ if image_mode == 1
     end
 end
 
-%% imaging pad
+% imaging pad
 I = imread("-1Group_25Position.png"); I = imresize(I,[panelPixelNumberVer,panelPixelNumberHor]);
 padSizeHor = max([max(0 - RR_center_xcell,[],"all"),max(RR_center_xcell-panelLengthHor,[],"all")]);
 padSizeHor = ceil(padSizeHor/pixel_size); if isnan(padSizeHor); padSizeHor = 0;end
@@ -94,5 +94,5 @@ elseif image_mode == 0
     V.image(:) = {RR_content};
 end
 
-%% Arrange II
+%% Arrange Step
 V.createII(method=method,only=3)
